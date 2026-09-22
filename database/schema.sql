@@ -81,3 +81,96 @@ CREATE TABLE submissions (
     FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
     FOREIGN KEY (room_id) REFERENCES rooms(room_id) ON DELETE CASCADE
 );
+
+-- =========================================================
+-- USERS
+-- =========================================================
+
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+
+    username VARCHAR(100) NOT NULL UNIQUE,
+
+    password_hash VARCHAR(255) NOT NULL,
+
+    role VARCHAR(50) NOT NULL,
+
+    room_id INT,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (room_id)
+        REFERENCES rooms(room_id)
+        ON DELETE SET NULL
+);
+
+
+
+-- =========================================================
+-- INCIDENTS
+-- =========================================================
+
+CREATE TABLE incidents (
+    incident_id SERIAL PRIMARY KEY,
+
+    exam_id INT,
+    room_id INT,
+    student_id INT,
+
+    type VARCHAR(100) NOT NULL,
+
+    severity VARCHAR(30) NOT NULL,
+
+    description TEXT NOT NULL,
+
+    status VARCHAR(30) NOT NULL DEFAULT 'OPEN',
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    resolved_at TIMESTAMP,
+
+    FOREIGN KEY (exam_id)
+        REFERENCES exams(exam_id)
+        ON DELETE SET NULL,
+
+    FOREIGN KEY (room_id)
+        REFERENCES rooms(room_id)
+        ON DELETE SET NULL,
+
+    FOREIGN KEY (student_id)
+        REFERENCES students(student_id)
+        ON DELETE SET NULL
+);
+
+
+-- =========================================================
+-- EXAM EVENTS
+-- =========================================================
+
+CREATE TABLE exam_events (
+    event_id SERIAL PRIMARY KEY,
+
+    exam_id INT,
+
+    room_id INT,
+
+    event_type VARCHAR(100) NOT NULL,
+
+    description TEXT,
+
+    event_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    user_id INT,
+
+    FOREIGN KEY (exam_id)
+        REFERENCES exams(exam_id)
+        ON DELETE SET NULL,
+
+    FOREIGN KEY (room_id)
+        REFERENCES rooms(room_id)
+        ON DELETE SET NULL,
+
+    FOREIGN KEY (user_id)
+        REFERENCES users(user_id)
+        ON DELETE SET NULL
+);
