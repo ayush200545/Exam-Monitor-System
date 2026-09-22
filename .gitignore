@@ -1,0 +1,8 @@
+bin/
+target/
+*.class
+*.jar
+*.zip
+.idea/
+*.iml
+.vscode/
