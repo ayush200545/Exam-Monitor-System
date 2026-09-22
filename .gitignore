@@ -3,6 +3,11 @@ target/
 *.class
 *.jar
 *.zip
+
+lib/
+
 .idea/
 *.iml
 .vscode/
+
+refactor.ps1

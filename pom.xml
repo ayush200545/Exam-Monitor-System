@@ -2,15 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.exam</groupId>
+    <groupId>com.dcs</groupId>
     <artifactId>exam-monitor-system</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>Distributed Examination Coordination and Monitoring System</name>
-    <description>DCS Project - Member 3: Incidents, Events, Heartbeats, Failure Detection, Recovery</description>
+    <description>DCS Project - Exam Management, Monitoring, Failure Detection and Recovery</description>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -19,17 +20,16 @@
     </properties>
 
     <dependencies>
-        <!-- PostgreSQL JDBC Driver (Ready for Member 4 integration) -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.7.2</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 
     <build>
-        <sourceDirectory>src</sourceDirectory>
+        <sourceDirectory>src/main/java</sourceDirectory>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -42,4 +42,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>
