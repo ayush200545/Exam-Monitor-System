@@ -1,0 +1,13 @@
+# Compiled class files
+bin/
+
+# Dependency directories
+lib/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+
+# Build scripts that we created temporarily
+refactor.ps1
