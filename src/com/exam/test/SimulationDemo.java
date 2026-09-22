@@ -136,10 +136,12 @@ public class SimulationDemo {
             }
 
             failureDetector.stop();
+            java.rmi.server.UnicastRemoteObject.unexportObject(service, true);
 
             System.out.println("\n======================================================================");
             System.out.println("   ALL MEMBER 3 DCS CORE MODULE TESTS PASSED SUCCESSFULLY!          ");
             System.out.println("======================================================================");
+            System.exit(0);
 
         } catch (Exception e) {
             System.err.println("\n[DEMO FAILED]: " + e.getMessage());
