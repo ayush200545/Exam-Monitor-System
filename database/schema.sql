@@ -1,6 +1,9 @@
 -- Database schema for Distributed Examination Coordination & Monitoring System
 
 -- Drop tables if they exist to allow easy re-creation
+DROP TABLE IF EXISTS exam_events;
+DROP TABLE IF EXISTS incidents;
+DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS submissions;
 DROP TABLE IF EXISTS attendance;
 DROP TABLE IF EXISTS exam_students;
@@ -93,7 +96,7 @@ CREATE TABLE users (
 
     password_hash VARCHAR(255) NOT NULL,
 
-    role VARCHAR(50) NOT NULL,
+    role VARCHAR(50) NOT NULL CHECK (role IN ('ADMIN', 'COORDINATOR', 'INVIGILATOR', 'ROOM_OPERATOR')),
 
     room_id INT,
 
@@ -123,7 +126,7 @@ CREATE TABLE incidents (
 
     description TEXT NOT NULL,
 
-    status VARCHAR(30) NOT NULL DEFAULT 'OPEN',
+    status VARCHAR(30) NOT NULL DEFAULT 'OPEN' CHECK (status IN ('OPEN', 'ACKNOWLEDGED', 'IN_PROGRESS', 'RESOLVED')),
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
@@ -174,3 +177,11 @@ CREATE TABLE exam_events (
         REFERENCES users(user_id)
         ON DELETE SET NULL
 );
+
+-- Read paths used by the coordinator and room dashboards.
+CREATE INDEX idx_rooms_current_exam ON rooms(current_exam_id);
+CREATE INDEX idx_exam_students_room ON exam_students(exam_id, room_id);
+CREATE INDEX idx_attendance_exam_room ON attendance(exam_id, room_id);
+CREATE INDEX idx_submissions_exam_room ON submissions(exam_id, room_id);
+CREATE INDEX idx_incidents_open ON incidents(status, room_id, created_at DESC);
+CREATE INDEX idx_exam_events_recent ON exam_events(event_timestamp DESC);

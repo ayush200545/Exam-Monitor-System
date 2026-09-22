@@ -6,6 +6,9 @@ import com.distributedexam.remote.HeartbeatRemote;
 import com.distributedexam.remote.RoomRemote;
 import com.distributedexam.remote.StudentRemote;
 import com.distributedexam.remote.SubmissionRemote;
+import com.distributedexam.remote.AuthRemote;
+import com.distributedexam.remote.MonitoringRemote;
+import com.distributedexam.remote.DashboardRemote;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -28,6 +31,9 @@ public class RMIClientConnector {
     private AttendanceRemote attendanceService;
     private SubmissionRemote submissionService;
     private HeartbeatRemote  heartbeatService;
+    private AuthRemote authService;
+    private MonitoringRemote monitoringService;
+    private DashboardRemote dashboardService;
 
     public RMIClientConnector(String host, int port) {
         this.host    = host;
@@ -46,6 +52,11 @@ public class RMIClientConnector {
         attendanceService = (AttendanceRemote) Naming.lookup(baseUrl + "AttendanceService");
         submissionService = (SubmissionRemote) Naming.lookup(baseUrl + "SubmissionService");
         heartbeatService  = (HeartbeatRemote)  Naming.lookup(baseUrl + "HeartbeatService");
+        // Member 4 services are optional so legacy clients can still connect to an
+        // original server that exposes only the existing service bindings.
+        try { authService = (AuthRemote) Naming.lookup(baseUrl + "AuthService"); } catch (NotBoundException ignored) { }
+        try { monitoringService = (MonitoringRemote) Naming.lookup(baseUrl + "MonitoringService"); } catch (NotBoundException ignored) { }
+        try { dashboardService = (DashboardRemote) Naming.lookup(baseUrl + "DashboardService"); } catch (NotBoundException ignored) { }
     }
 
     public ExamRemote       getExamService()       { return examService; }
@@ -54,4 +65,7 @@ public class RMIClientConnector {
     public AttendanceRemote getAttendanceService()  { return attendanceService; }
     public SubmissionRemote getSubmissionService()  { return submissionService; }
     public HeartbeatRemote  getHeartbeatService()   { return heartbeatService; }
+    public AuthRemote getAuthService() { return authService; }
+    public MonitoringRemote getMonitoringService() { return monitoringService; }
+    public DashboardRemote getDashboardService() { return dashboardService; }
 }

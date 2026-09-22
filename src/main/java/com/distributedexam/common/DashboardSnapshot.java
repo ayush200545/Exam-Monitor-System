@@ -1,0 +1,3 @@
+package com.distributedexam.common;
+import java.io.Serializable; import java.util.*;
+public class DashboardSnapshot implements Serializable { private static final long serialVersionUID=1L; public int totalRooms,onlineRooms,offlineRooms,runningExams,attendanceCount,submissionCount,openIncidents; public List<Room> rooms=new ArrayList<>(); public List<ExamEvent> recentEvents=new ArrayList<>(); public Map<Integer,Double> attendancePercentByRoom=new LinkedHashMap<>(); public Map<Integer,Double> submissionProgressByRoom=new LinkedHashMap<>(); public Map<String,Integer> incidentSummary=new LinkedHashMap<>(); public Map<String,Integer> roomStatusSummary=new LinkedHashMap<>(); public Map<Integer,String> examCompletionStatus=new LinkedHashMap<>(); }

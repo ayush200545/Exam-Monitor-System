@@ -52,11 +52,9 @@ public class RoomDAOImpl implements RoomDAO {
         List<Room> rooms = new ArrayList<>();
         String query = "SELECT * FROM rooms";
         try (Connection conn = DBConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-            while (rs.next()) {
-                rooms.add(extractRoomFromResultSet(rs));
-            }
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) rooms.add(extractRoomFromResultSet(rs));
         }
         return rooms;
     }

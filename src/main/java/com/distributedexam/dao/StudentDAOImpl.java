@@ -46,11 +46,9 @@ public class StudentDAOImpl implements StudentDAO {
         List<Student> students = new ArrayList<>();
         String query = "SELECT * FROM students";
         try (Connection conn = DBConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-            while (rs.next()) {
-                students.add(extractStudentFromResultSet(rs));
-            }
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) students.add(extractStudentFromResultSet(rs));
         }
         return students;
     }

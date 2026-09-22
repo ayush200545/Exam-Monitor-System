@@ -33,6 +33,9 @@ public class RMIServer {
             com.distributedexam.server.attendance.AttendanceManager attManager  = new com.distributedexam.server.attendance.AttendanceManager();
             com.distributedexam.server.submission.SubmissionManager subManager  = new com.distributedexam.server.submission.SubmissionManager();
             com.distributedexam.server.student.StudentManager studentManager    = new com.distributedexam.server.student.StudentManager();
+            com.distributedexam.server.auth.AuthManager authManager = new com.distributedexam.server.auth.AuthManager();
+            com.distributedexam.server.monitoring.MonitoringManager monitoringManager = new com.distributedexam.server.monitoring.MonitoringManager();
+            com.distributedexam.server.dashboard.DashboardManager dashboardManager = new com.distributedexam.server.dashboard.DashboardManager();
 
             Naming.rebind("ExamService",       examManager);
             System.out.println("ExamService       -> READY");
@@ -48,6 +51,10 @@ public class RMIServer {
 
             Naming.rebind("SubmissionService", subManager);
             System.out.println("SubmissionService -> READY");
+            Naming.rebind("AuthService", authManager);
+            Naming.rebind("MonitoringService", monitoringManager);
+            Naming.rebind("DashboardService", dashboardManager);
+            System.out.println("AuthService, MonitoringService, DashboardService -> READY");
 
             // -- Member 1 distributed communication services --
             HeartbeatService heartbeatService = new HeartbeatService();

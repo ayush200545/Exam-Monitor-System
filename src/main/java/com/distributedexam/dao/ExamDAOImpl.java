@@ -50,11 +50,9 @@ public class ExamDAOImpl implements ExamDAO {
         List<Exam> exams = new ArrayList<>();
         String query = "SELECT * FROM exams";
         try (Connection conn = DBConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-            while (rs.next()) {
-                exams.add(extractExamFromResultSet(rs));
-            }
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) exams.add(extractExamFromResultSet(rs));
         }
         return exams;
     }
