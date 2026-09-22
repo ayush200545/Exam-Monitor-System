@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Server-side implementation of HeartbeatRemote.
  * Tracks room registrations and heartbeat timestamps using thread-safe collections.
+ * Delegates recovery events to RecoveryManager.
  */
 public class HeartbeatService extends UnicastRemoteObject implements HeartbeatRemote {
 
@@ -21,17 +22,29 @@ public class HeartbeatService extends UnicastRemoteObject implements HeartbeatRe
 
     /** Thread-safe map: roomId -> RoomConnectionInfo */
     private final ConcurrentHashMap<String, RoomConnectionInfo> roomRegistry = new ConcurrentHashMap<>();
+    private final RecoveryManager recoveryManager;
 
     public HeartbeatService() throws RemoteException {
         super();
+        this.recoveryManager = new RecoveryManager(roomRegistry);
     }
 
     @Override
     public void registerRoom(RoomConnectionInfo info) throws RemoteException {
+        // Check if this room was previously OFFLINE (recovery scenario)
+        RoomConnectionInfo existing = roomRegistry.get(info.getRoomId());
+        boolean recovering = existing != null && existing.getConnectionState() == ConnectionState.OFFLINE;
+
         info.setConnectionState(ConnectionState.ONLINE);
         info.setLastHeartbeat(Instant.now());
         roomRegistry.put(info.getRoomId(), info);
-        System.out.println("[SERVER] Room " + info.getRoomId() + " registered -> ONLINE");
+
+        if (recovering) {
+            System.out.println("\n[RECOVERY] Room " + info.getRoomId() + " has reconnected.");
+            System.out.println("[RECOVERY] " + info.getRoomId() + " -> ONLINE\n");
+        } else {
+            System.out.println("[SERVER] Room " + info.getRoomId() + " registered -> ONLINE");
+        }
     }
 
     @Override
@@ -55,7 +68,7 @@ public class HeartbeatService extends UnicastRemoteObject implements HeartbeatRe
         return new ArrayList<>(roomRegistry.values());
     }
 
-    /** Used by FailureDetector to inspect the registry */
+    /** Used by FailureDetector and RMIServer to inspect the registry */
     public ConcurrentHashMap<String, RoomConnectionInfo> getRoomRegistry() {
         return roomRegistry;
     }
