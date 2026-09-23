@@ -4,7 +4,7 @@
 This repository implements the **Distributed Monitoring Subsystem** using Java RMI as part of the Distributed Computing Systems (DCS) course project.
 
 ---
-
+   
 ## 1. System Architecture
 
 ```text
